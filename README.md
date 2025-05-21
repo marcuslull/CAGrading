@@ -57,12 +57,10 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
     | D     | 60-69  |
     | F     | 0-59   |
 
-## Technical design
+## Technical choices
+The problem aims to maintain a functional solution so, I will need to minimize any external manipulation of the grades collection rather focus on producing data from the data structure rather than modifying or keeping state in the class. There are several small requirements that will require consideration for separation of concerns. It's very easy to let Java Streams turn into spaghetti monsters if responsibility is not divided up.  
+I think the way forward with this assignment will be a single class with a main method and several helpers for each of the bits of functionality. After a first implementation pass, I can figure out a good test and then look to refactor for optimization, naming, and readability.
 
-
-## Code notes
-
-## Test notes
 
 ## Optimization notes
 
