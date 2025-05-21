@@ -11,7 +11,7 @@ public class Grading {
 
         // use provided expression to generate 1000 grades
         return Stream.generate(() -> (int) (100.0d - Math.exp(random.nextGaussian() * 0.25 + 3.5) + 20))
-                .limit(1000).toList(); // TODO: needs to be immutable
+                .limit(1000).toList();
     }
 
     private static List<Integer> normalizeGrades(List<Integer> grades) {
@@ -30,27 +30,47 @@ public class Grading {
         clippedGrades.stream().min(Integer::compare).ifPresent(min -> System.out.println("Minimum grade: " + min));
         clippedGrades.stream().max(Integer::compare).ifPresent(max -> System.out.println("Maximum grade: " + max));
 
+        // use filter to select perfect grades
+        long perfectCount = clippedGrades.stream().filter(g -> g == 100).count();
+        System.out.println("Perfect score count: " + perfectCount);
+
         // use Collectors built in method to calculate the average grade as a double
         double avg = clippedGrades.stream().collect(Collectors.averagingInt(g -> g));
         System.out.println("Average grade: " + avg);
     }
 
+    private static void displayGradeCounts(List<Integer> clippedGrades) {
+
+        // partition the grades using `getLetterGrade` helper method as a classifier for the groupingBy aggregate function.
+        clippedGrades.stream()
+                .collect(Collectors.groupingBy(Grading::getLetterGrade))
+                .forEach((k, v) -> System.out.printf("Letter grade %s: %d students%n", k, v.size()));
+    }
+
+    private static Character getLetterGrade(Integer grade) {
+
+        // short circuit grade classification helper
+        if (grade > 89) return 'A';
+        if (grade > 79) return 'B';
+        if (grade > 69) return 'C';
+        if (grade > 59) return 'D';
+        return 'F';
+    }
+
     public static void main(String[] args) {
 
-        // generate grades
+        System.out.println("\nGRADE GENERATOR");
+
+        System.out.println("This demo generates 1000 random grades of lognormal distribution " +
+                "and then displays basic statistics of the grade distribution.\n");
+
+        System.out.println("------");
+
         List<Integer> grades = gradeGenerator();
-        System.out.println("grades = " + grades);
-
-        // clip grades to 0-100
         List<Integer> clippedGrades = normalizeGrades(grades);
-        System.out.println("clippedGrades = " + clippedGrades);
-
-        // display data
-        // stats
         displayStatistics(clippedGrades);
+        displayGradeCounts(clippedGrades);
 
-        // letter grade count
-        // perfect count
-
+        System.out.println("------\n");
     }
 }

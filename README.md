@@ -59,6 +59,7 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
 
 ## Technical design
 
+
 ## Code notes
 
 ## Test notes
