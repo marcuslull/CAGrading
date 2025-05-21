@@ -18,6 +18,18 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
 
 **Hints**: read up on lambdas and functional interfaces.
 
+## Process breakdown
+1. Understand clearly the problem statement and ask clarifying questions if needed.
+2. Prepare the README.md to outline resolution process
+3. Explore assumptions and document
+4. Technical design
+5. Code
+6. Test
+7. Refactor for optimization
+8. Test
+9. Documentation
+10. Submit for review
+
 ## Interpretation and assumptions
 * Use the Java streams API where possible
 * Generate random grades between 0-100 inclusive using the provided code
@@ -29,9 +41,27 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
   * Basic statistics - min, max, avg
   * Number of students receiving each grade as: `Letter grade A: 354 students`
   * Count of students receiving 100
-* Console based application
+* Assumption: Console based application
+* Assumption: Adhere to functional programming paradigm
+  * avoiding changing state and mutable data
+* Assumption: Wording '...first 1,000 grades'
+  * I will limit the generation to 1000 grades programmatically
+* Assumption: Grading Scale
+  * According to a [2009 High School Transcript Study](https://en.wikipedia.org/wiki/Academic_grading_in_the_United_States#cite_note-2) the most common scale is:
+  
+    | Grade | %      |
+    |-------|--------|
+    | A     | 90-100 |
+    | B     | 80-89  |
+    | C     | 70-79  |
+    | D     | 60-69  |
+    | F     | 0-59   |
 
-## Process breakdown
-1. Understand clearly the problem statement and ask clarifying questions if needed.
-2. Prepare the README.md to outline resolution process
-3. 
+## Technical design
+
+## Code notes
+
+## Test notes
+
+## Optimization notes
+
