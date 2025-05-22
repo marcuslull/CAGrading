@@ -30,7 +30,7 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
 9. Documentation
 10. Submit for review
 
-## Interpretation and assumptions
+## My Interpretation and assumptions
 * Use the Java streams API where possible
 * Generate random grades between 0-100 inclusive using the provided code
   * `int grade = (int) (100.0d - Math.exp(random.nextGaussian() * 0.25 + 3.5) + 20);`
@@ -57,13 +57,21 @@ Now, for the first 1,000 random grades from the stream above, calculate and disp
     | D     | 60-69  |
     | F     | 0-59   |
 
-## Technical choices
+### Understanding the given grade calculation
+`int grade = (int) (100.0d - Math.exp(random.nextGaussian() * 0.25 + 3.5) + 20);`  
+* This calculates a pseudo-random number with a mean distribution of ~ 86 (after truncation to int)
+* I believe this could be simplified for one less calculation to: `int grade = (int) (120.0d - Math.exp(random.nextGaussian() * 0.25 + 3.5));`
+* There was a new random interface (`RandomGenerator`) introduced in Java 17 that can produce this desired result in a more concise manner.
+
+## My technical choices
 The problem aims to maintain a functional solution so, I will need to minimize any external manipulation of the grades collection rather focus on producing data from the data structure rather than modifying or keeping state in the class. There are several small requirements that will require consideration for separation of concerns. It's very easy to let Java Streams turn into spaghetti monsters if responsibility is not divided up.  
-I think the way forward with this assignment will be a single class with a main method and several helpers for each of the bits of functionality. After a first implementation pass, I can figure out a good test and then look to refactor for optimization, naming, and readability.
 
+The Java Streams API embodies the functional programming style. It is a living API with improvements added nearly every major version of Java. I will need to spend time learning about possible function choices to keep the overall methods concise and readable.
 
-## Improvement recommendations
-* Separation of concerns - After sleeping on it, I see that both display methods could be refactored to separate the display from the Stream logic.
-* DRY - I'd like to find a Stream intermediate that will allow for combining of both min and max grade functions.
-* Testing - I would like to refactor both display methods for better testing. My separation of concerns point above would help solve this. The data would be returned and easily tested
+I think the way forward with this assignment will be a single class with a main method and several helpers for each of the bits of functionality. After a first implementation pass, I can figure out a good test for each method and then look to refactor for optimization, naming, and readability.
+
+## Lessons learned
+* `.summaryStatistics()` - This is so useful!!!
+* lognormal distribution - This concept probably was covered in statistics, but it's interesting to see a method for generating a realistic bell curve.
+* `Collectors.groupingBy(Grading::getLetterGrade, TreeMap::new, Collectors.counting())` - The default groupingBy uses a HashMap as the backing structure. The problem was I needed a map type data structure that would maintain order so the grades were displayed correctly. While exploring these options I also discovered a more efficient downstream collector: `Collectors.counting()` as this is the only data we are interested in anyway it would naturally be more efficient space wise rather than having to store the entire data set again just to get `.size()`
 

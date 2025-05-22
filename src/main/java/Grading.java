@@ -1,9 +1,12 @@
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Grading {
+
 
     public static List<Integer> gradeGenerator(Random random) {
 
@@ -12,7 +15,9 @@ public class Grading {
                 .limit(1000).toList();
     }
 
-    protected static List<Integer> normalizeGrades(List<Integer> grades) {
+
+    // default access modifiers for testing purposes
+    static List<Integer> normalizeGrades(List<Integer> grades) {
 
         // normalize grades below 0 or above 100 to 0 or 100
         return grades.stream().map(g -> {
@@ -22,30 +27,37 @@ public class Grading {
         }).toList();
     }
 
-    protected static void displayStatistics(List<Integer> clippedGrades) {
 
-        // use Integer comparator to determine min and max and print to console
-        clippedGrades.stream().min(Integer::compare).ifPresent(min -> System.out.println("Minimum grade: " + min));
-        clippedGrades.stream().max(Integer::compare).ifPresent(max -> System.out.println("Maximum grade: " + max));
+    static void displayStatistics(List<Integer> clippedGrades) {
+
+        // `summaryStatistics()` has all the info we need
+        IntSummaryStatistics statistics = clippedGrades.stream().mapToInt(Integer::intValue).summaryStatistics();
+        System.out.println("Minimum grade: " + statistics.getMin());
+        System.out.println("Maximum grade: " + statistics.getMax());
+        System.out.println("Average grade: " + statistics.getAverage());
+    }
+
+
+    static void displayPerfectCount(List<Integer> clippedGrades) {
 
         // use filter to select perfect grades
         long perfectCount = clippedGrades.stream().filter(g -> g == 100).count();
         System.out.println("Perfect score count: " + perfectCount);
-
-        // use Collectors built in method to calculate the average grade as a double
-        double avg = clippedGrades.stream().collect(Collectors.averagingInt(g -> g));
-        System.out.println("Average grade: " + avg);
     }
 
-    protected static void displayGradeCounts(List<Integer> clippedGrades) {
 
-        // partition the grades using `getLetterGrade` helper method as a classifier for the groupingBy aggregate function.
+    static void displayGradeCounts(List<Integer> clippedGrades) {
+
+        // partition the grades using `getLetterGrade` helper method as a classifier for the groupingBy function.
+        // A treeMap is preferred over the default hashMap for ordering purposes.
+        // Adding the Collectors.counting() downstream collector gives us the total count of grades in each partition.
         clippedGrades.stream()
-                .collect(Collectors.groupingBy(Grading::getLetterGrade))
-                .forEach((k, v) -> System.out.printf("Letter grade %s: %d students%n", k, v.size()));
+                .collect(Collectors.groupingBy(Grading::getLetterGrade, TreeMap::new, Collectors.counting()))
+                .forEach((letterGrade, count) -> System.out.printf("Letter grade %s: %d students%n", letterGrade, count));
     }
 
-    protected static Character getLetterGrade(Integer grade) {
+
+    static Character getLetterGrade(Integer grade) {
 
         // short circuit grade classification helper
         if (grade > 89) return 'A';
@@ -54,6 +66,7 @@ public class Grading {
         if (grade > 59) return 'D';
         return 'F';
     }
+
 
     public static void main(String[] args) {
 
@@ -69,6 +82,7 @@ public class Grading {
         List<Integer> grades = gradeGenerator(random);
         List<Integer> clippedGrades = normalizeGrades(grades);
         displayStatistics(clippedGrades);
+        displayPerfectCount(clippedGrades);
         displayGradeCounts(clippedGrades);
 
         System.out.println("------\n");
