@@ -16,7 +16,7 @@ public class Grading {
 
         // normalize grades below 0 or above 100 to 0 or 100
         return grades.stream().map(g -> {
-            if (g > 100) g = 100; // internal mutation is still acceptable for the functional paradigm
+            if (g > 100) g = 100; // internal mutation where required is still acceptable for the functional paradigm
             if (g < 0) g = 0;
             return g;
         }).toList();

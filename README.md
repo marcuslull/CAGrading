@@ -62,5 +62,8 @@ The problem aims to maintain a functional solution so, I will need to minimize a
 I think the way forward with this assignment will be a single class with a main method and several helpers for each of the bits of functionality. After a first implementation pass, I can figure out a good test and then look to refactor for optimization, naming, and readability.
 
 
-## Optimization notes
+## Improvement recommendations
+* Separation of concerns - After sleeping on it, I see that both display methods could be refactored to separate the display from the Stream logic.
+* DRY - I'd like to find a Stream intermediate that will allow for combining of both min and max grade functions.
+* Testing - I would like to refactor both display methods for better testing. My separation of concerns point above would help solve this. The data would be returned and easily tested
 
