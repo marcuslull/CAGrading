@@ -5,16 +5,14 @@ import java.util.stream.Stream;
 
 public class Grading {
 
-    static Random random = new Random(); // not inherently functional as it will maintain state
-
-    public static List<Integer> gradeGenerator() {
+    public static List<Integer> gradeGenerator(Random random) {
 
         // use provided expression to generate 1000 grades
         return Stream.generate(() -> (int) (100.0d - Math.exp(random.nextGaussian() * 0.25 + 3.5) + 20))
                 .limit(1000).toList();
     }
 
-    private static List<Integer> normalizeGrades(List<Integer> grades) {
+    protected static List<Integer> normalizeGrades(List<Integer> grades) {
 
         // normalize grades below 0 or above 100 to 0 or 100
         return grades.stream().map(g -> {
@@ -24,7 +22,7 @@ public class Grading {
         }).toList();
     }
 
-    private static void displayStatistics(List<Integer> clippedGrades) {
+    protected static void displayStatistics(List<Integer> clippedGrades) {
 
         // use Integer comparator to determine min and max and print to console
         clippedGrades.stream().min(Integer::compare).ifPresent(min -> System.out.println("Minimum grade: " + min));
@@ -39,7 +37,7 @@ public class Grading {
         System.out.println("Average grade: " + avg);
     }
 
-    private static void displayGradeCounts(List<Integer> clippedGrades) {
+    protected static void displayGradeCounts(List<Integer> clippedGrades) {
 
         // partition the grades using `getLetterGrade` helper method as a classifier for the groupingBy aggregate function.
         clippedGrades.stream()
@@ -47,7 +45,7 @@ public class Grading {
                 .forEach((k, v) -> System.out.printf("Letter grade %s: %d students%n", k, v.size()));
     }
 
-    private static Character getLetterGrade(Integer grade) {
+    protected static Character getLetterGrade(Integer grade) {
 
         // short circuit grade classification helper
         if (grade > 89) return 'A';
@@ -66,7 +64,9 @@ public class Grading {
 
         System.out.println("------");
 
-        List<Integer> grades = gradeGenerator();
+        Random random = new Random(); // not inherently functional as it will maintain state
+
+        List<Integer> grades = gradeGenerator(random);
         List<Integer> clippedGrades = normalizeGrades(grades);
         displayStatistics(clippedGrades);
         displayGradeCounts(clippedGrades);
