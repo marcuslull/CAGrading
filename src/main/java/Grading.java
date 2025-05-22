@@ -5,9 +5,22 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * {@code Grading} provides demo functionality to generate, normalize,
+ * and analyze a list of student grades. The demo serves as an exercise in the
+ * use of the Java Streams API.
+ * The class will generate a list of 1000 grades using a lognormal distribution,
+ * clip the grades to a range of 0-100, and display various statistics.
+ */
 public class Grading {
 
 
+    /**
+     * Generates 1000 lognormal grades with a mean of ~ 86.
+     *
+     * @param random The Random generator used to generate random numbers
+     * @return A List of 1000 grades, not normalized
+     */
     public static List<Integer> gradeGenerator(Random random) {
 
         // use provided expression to generate 1000 grades
@@ -16,8 +29,14 @@ public class Grading {
     }
 
 
-    // default access modifiers for testing purposes
+    /**
+     * Normalizes a List of grades to a range of 0-100.
+     *
+     * @param grades A List of grades
+     * @return A List of normalized grades such that grades < 0 = 0 and grades > 100 = 100
+     */
     static List<Integer> normalizeGrades(List<Integer> grades) {
+        // default access modifiers for testing purposes
 
         // normalize grades below 0 or above 100 to 0 or 100
         return grades.stream().map(g -> {
@@ -28,6 +47,12 @@ public class Grading {
     }
 
 
+    /**
+     * Parses a List of normalized (0-100) grades and displays minimum, maximum, and average grades
+     * to the console.
+     *
+     * @param clippedGrades A list of grades that have been normalized to a range 0-100.
+     */
     static void displayStatistics(List<Integer> clippedGrades) {
 
         // `summaryStatistics()` has all the info we need
@@ -38,6 +63,11 @@ public class Grading {
     }
 
 
+    /**
+     * Parses a List of normalized (0-100) grades and displays the perfect score (100) count.
+     *
+     * @param clippedGrades A list of grades that have been normalized to a range 0-100.
+     */
     static void displayPerfectCount(List<Integer> clippedGrades) {
 
         // use filter to select perfect grades
@@ -46,6 +76,12 @@ public class Grading {
     }
 
 
+    /**
+     * Parses a List of normalized (0-100) grades and displays the grade count by letter grade.
+     * A = 90-100, B = 80-89, C = 70-79, D = 60-69, F = 0-59
+     *
+     * @param clippedGrades A list of grades that have been normalized to a range 0-100.
+     */
     static void displayGradeCounts(List<Integer> clippedGrades) {
 
         // partition the grades using `getLetterGrade` helper method as a classifier for the groupingBy function.
@@ -57,6 +93,13 @@ public class Grading {
     }
 
 
+    /**
+     * Associates a normalized (0-100) percent grade and a letter grade.
+     * A = 90-100, B = 80-89, C = 70-79, D = 60-69, F = 0-59
+     *
+     * @param grade The normalized (0-100) percent grade
+     * @return the associated letter grade
+     */
     static Character getLetterGrade(Integer grade) {
 
         // short circuit grade classification helper
